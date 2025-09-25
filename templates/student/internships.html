@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}Internships - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-briefcase me-2"></i>Internship Opportunities</h2>
+                    <p class="text-muted">Explore internship opportunities posted by alumni from various companies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Options -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Company</label>
+                            <input type="text" name="company" class="form-control" placeholder="Search by company" value="{{ request.GET.company }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Position</label>
+                            <input type="text" name="position" class="form-control" placeholder="Search by position" value="{{ request.GET.position }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Duration</label>
+                            <select name="duration" class="form-select">
+                                <option value="">Any Duration</option>
+                                <option value="1-3" {% if request.GET.duration == "1-3" %}selected{% endif %}>1-3 months</option>
+                                <option value="3-6" {% if request.GET.duration == "3-6" %}selected{% endif %}>3-6 months</option>
+                                <option value="6-12" {% if request.GET.duration == "6-12" %}selected{% endif %}>6-12 months</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Filter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internship Listings -->
+    <div class="row">
+        {% for internship in internships %}
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title mb-1">{{ internship.position }}</h5>
+                            <p class="text-muted mb-0">{{ internship.company_name }}</p>
+                        </div>
+                        {% if internship.stipend > 0 %}
+                            <span class="badge bg-success">₹{{ internship.stipend }}/month</span>
+                        {% else %}
+                            <span class="badge bg-primary">Unpaid</span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="card-text text-muted mb-3">{{ internship.description|truncatewords:25 }}</p>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ internship.duration_months }} months
+                            </small>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ internship.location }}
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="mb-2">Requirements:</h6>
+                        <p class="text-muted small">{{ internship.requirements|truncatewords:20 }}</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-user me-1"></i>
+                            Posted by {{ internship.posted_by.profile.user.get_full_name }}
+                        </small>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            {{ internship.posted_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-primary btn-sm" onclick="applyForInternship({{ internship.id }})">
+                            <i class="fas fa-paper-plane me-1"></i>Apply Now
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm ms-2" onclick="viewInternshipDetails({{ internship.id }})">
+                            <i class="fas fa-eye me-1"></i>View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No internships available</h5>
+                    <p class="text-muted">Check back later for new internship opportunities</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if internships.has_other_pages %}
+    <nav aria-label="Internship listings pagination">
+        <ul class="pagination justify-content-center">
+            {% if internships.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.company %}&company={{ request.GET.company }}{% endif %}{% if request.GET.position %}&position={{ request.GET.position }}{% endif %}{% if request.GET.duration %}&duration={{ request.GET.duration }}{% endif %}">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ internships.previous_page_number }}{% if request.GET.company %}&company={{ request.GET.company }}{% endif %}{% if request.GET.position %}&position={{ request.GET.position }}{% endif %}{% if request.GET.duration %}&duration={{ request.GET.duration }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ internships.number }} of {{ internships.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if internships.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ internships.next_page_number }}{% if request.GET.company %}&company={{ request.GET.company }}{% endif %}{% if request.GET.position %}&position={{ request.GET.position }}{% endif %}{% if request.GET.duration %}&duration={{ request.GET.duration }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ internships.paginator.num_pages }}{% if request.GET.company %}&company={{ request.GET.company }}{% endif %}{% if request.GET.position %}&position={{ request.GET.position }}{% endif %}{% if request.GET.duration %}&duration={{ request.GET.duration }}{% endif %}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<!-- Internship Application Modal -->
+<div class="modal fade" id="internshipApplicationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Apply for Internship</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="internshipApplicationForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="internshipId" name="internship_id">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" value="{{ student.profile.user.get_full_name }}" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="{{ student.profile.user.email }}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Branch</label>
+                            <input type="text" class="form-control" value="{{ student.branch }}" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CGPA</label>
+                            <input type="text" class="form-control" value="{{ student.cgpa }}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cover Letter</label>
+                        <textarea class="form-control" rows="4" placeholder="Write a brief cover letter explaining your interest and qualifications..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Resume/CV</label>
+                        <input type="file" class="form-control" accept=".pdf,.doc,.docx">
+                        <div class="form-text">Upload your resume (PDF or DOC format)</div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Your application will be sent to the alumni who posted this internship. They will contact you directly if interested.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="submitInternshipApplication()">Submit Application</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Internship Details Modal -->
+<div class="modal fade" id="internshipDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Internship Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="internshipDetailsContent">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="applyFromDetails()">Apply Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function applyForInternship(internshipId) {
+    document.getElementById('internshipId').value = internshipId;
+    const modal = new bootstrap.Modal(document.getElementById('internshipApplicationModal'));
+    modal.show();
+}
+
+function viewInternshipDetails(internshipId) {
+    // This would typically fetch internship details via AJAX
+    document.getElementById('internshipDetailsContent').innerHTML = `
+        <div class="text-center py-4">
+            <div class="loading"></div>
+            <p class="text-muted mt-2">Loading internship details...</p>
+        </div>
+    `;
+    
+    const modal = new bootstrap.Modal(document.getElementById('internshipDetailsModal'));
+    modal.show();
+    
+    // Simulate loading (replace with actual AJAX call)
+    setTimeout(() => {
+        document.getElementById('internshipDetailsContent').innerHTML = `
+            <h6>Position: Software Development Intern</h6>
+            <p class="text-muted">Company: Tech Solutions Pvt Ltd</p>
+            <p><strong>Description:</strong></p>
+            <p>We are looking for a motivated software development intern to join our team...</p>
+            <p><strong>Requirements:</strong></p>
+            <ul>
+                <li>Knowledge of programming languages (Python, Java, or C++)</li>
+                <li>Understanding of software development lifecycle</li>
+                <li>Good communication skills</li>
+                <li>Currently enrolled in Computer Science or related field</li>
+            </ul>
+            <p><strong>Duration:</strong> 6 months</p>
+            <p><strong>Stipend:</strong> ₹15,000/month</p>
+            <p><strong>Location:</strong> Bangalore, Karnataka</p>
+        `;
+    }, 1000);
+}
+
+function submitInternshipApplication() {
+    const form = document.getElementById('internshipApplicationForm');
+    const coverLetter = form.querySelector('textarea').value.trim();
+    const resumeFile = form.querySelector('input[type="file"]').files[0];
+    
+    if (!coverLetter) {
+        alert('Please write a cover letter');
+        return;
+    }
+    
+    if (!resumeFile) {
+        alert('Please upload your resume');
+        return;
+    }
+    
+    // In a real implementation, this would submit the form via AJAX
+    alert('Application submitted successfully! The alumni will contact you directly.');
+    
+    const modal = bootstrap.Modal.getInstance(document.getElementById('internshipApplicationModal'));
+    modal.hide();
+}
+
+function applyFromDetails() {
+    const modal = bootstrap.Modal.getInstance(document.getElementById('internshipDetailsModal'));
+    modal.hide();
+    
+    // Trigger the application modal
+    setTimeout(() => {
+        applyForInternship(1); // This would use the actual internship ID
+    }, 300);
+}
+</script>
+{% endblock %}

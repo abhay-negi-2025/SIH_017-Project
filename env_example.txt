@@ -1,0 +1,23 @@
+# Django Settings
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+
+# Database Settings (SQLite for development)
+DATABASE_URL=sqlite:///db.sqlite3
+
+# Stripe Payment Gateway (Get from https://stripe.com)
+STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+STRIPE_SECRET_KEY=sk_test_your_secret_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+
+# Email Settings (Optional)
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# Static Files
+STATIC_URL=/static/
+MEDIA_URL=/media/

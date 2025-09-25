@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">Welcome, {{ student.profile.user.get_full_name }}!</h2>
+                    <p class="text-muted mb-0">{{ student.branch }} {{ student.batch_year }} • {{ student.college_name }}</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-success fs-6">{{ student.profile.user_type|title }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-graduate fa-2x mb-2"></i>
+                    <div class="stat-number">{{ mentorship_applications.count }}</div>
+                    <p class="mb-0">Mentorship Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                    <div class="stat-number">{{ event_registrations.count }}</div>
+                    <p class="mb-0">Event Registrations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-briefcase fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Internship Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Alumni Connections</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a href="{% url 'student_alumni_search' %}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-search fa-2x mb-2"></i>
+                                <span>Search Alumni</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'student_events' %}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-calendar fa-2x mb-2"></i>
+                                <span>View Events</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'student_mentorship' %}" class="btn btn-outline-info w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
+                                <span>Find Mentor</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'student_internships' %}" class="btn btn-outline-success w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-briefcase fa-2x mb-2"></i>
+                                <span>View Internships</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Mentorship Applications -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Mentorship Applications</h5>
+                    <a href="{% url 'student_mentorship' %}" class="btn btn-sm btn-primary">Apply Now</a>
+                </div>
+                <div class="card-body">
+                    {% if mentorship_applications %}
+                        {% for application in mentorship_applications %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <h6 class="mb-1">{{ application.topic }}</h6>
+                                <p class="mb-1 text-muted">Mentor: {{ application.mentor.profile.user.get_full_name }}</p>
+                                <small class="text-muted">{{ application.created_at|date:"M d, Y" }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge status-{{ application.status }}">
+                                    {{ application.status|title }}
+                                </span>
+                                {% if application.payment_status %}
+                                    <span class="badge bg-success ms-1">Paid</span>
+                                {% else %}
+                                    <span class="badge bg-warning ms-1">Payment Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No mentorship applications yet</p>
+                            <a href="{% url 'student_mentorship' %}" class="btn btn-primary">Apply for Mentorship</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Registrations -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Event Registrations</h5>
+                    <a href="{% url 'student_events' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if event_registrations %}
+                        {% for registration in event_registrations %}
+                        <div class="py-2 border-bottom">
+                            <h6 class="mb-1">{{ registration.event.title }}</h6>
+                            <p class="mb-1 text-muted">{{ registration.event.event_date|date:"M d, Y g:i A" }}</p>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">{{ registration.event.venue }}</small>
+                                {% if registration.payment_status %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Payment Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No event registrations yet</p>
+                            <a href="{% url 'student_events' %}" class="btn btn-primary">Browse Events</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Progress -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Academic Progress</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h4 class="text-primary mb-1">{{ student.current_semester }}</h4>
+                                <small class="text-muted">Current Semester</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success mb-1">{{ student.cgpa }}</h4>
+                            <small class="text-muted">CGPA</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Branch</span>
+                        <span class="fw-bold">{{ student.branch }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Batch</span>
+                        <span class="fw-bold">{{ student.batch_year }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">College</span>
+                        <span class="fw-bold">{{ student.college_name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Quick Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-user-graduate text-primary me-3 mt-1"></i>
+                        <div>
+                            <h6 class="mb-1">Connect with Alumni</h6>
+                            <p class="small text-muted mb-0">Search for alumni in your field to get career guidance and networking opportunities.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-chalkboard-teacher text-success me-3 mt-1"></i>
+                        <div>
+                            <h6 class="mb-1">Find a Mentor</h6>
+                            <p class="small text-muted mb-0">Apply for mentorship to get personalized guidance from experienced professionals.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-0">
+                        <i class="fas fa-briefcase text-warning me-3 mt-1"></i>
+                        <div>
+                            <h6 class="mb-1">Explore Internships</h6>
+                            <p class="small text-muted mb-0">Browse internship opportunities posted by alumni in various companies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

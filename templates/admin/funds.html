@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}Fund Management - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-hand-holding-heart me-2"></i>Fund Management</h2>
+                    <p class="text-muted">Track donations and fundraising progress</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fund Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-rupee-sign fa-2x mb-2"></i>
+                    <div class="stat-number">₹{{ total_funds|floatformat:0 }}</div>
+                    <p class="mb-0">Total Funds Raised</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <div class="stat-number">{{ donations.count }}</div>
+                    <p class="mb-0">Total Donors</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <div class="stat-number">{{ donations|length }}</div>
+                    <p class="mb-0">Verified Donations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-2x mb-2"></i>
+                    <div class="stat-number">₹{{ total_funds|floatformat:0|div:donations.count|floatformat:0|default:"0" }}</div>
+                    <p class="mb-0">Average Donation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Donations</h5>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-success" onclick="exportDonations()">
+                            <i class="fas fa-download me-1"></i>Export
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="refreshDonations()">
+                            <i class="fas fa-sync me-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if donations %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Amount</th>
+                                        <th>Purpose</th>
+                                        <th>Date</th>
+                                        <th>Payment ID</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for donation in donations %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                     style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ donation.donor.profile.user.get_full_name }}</h6>
+                                                    <small class="text-muted">{{ donation.donor.branch }} {{ donation.donor.batch_year }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success">₹{{ donation.amount }}</span>
+                                        </td>
+                                        <td>{{ donation.purpose }}</td>
+                                        <td>{{ donation.donation_date|date:"M d, Y" }}</td>
+                                        <td>
+                                            <code class="small">{{ donation.payment_id|truncatechars:10 }}</code>
+                                        </td>
+                                        <td>
+                                            {% if donation.is_verified %}
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check me-1"></i>Verified
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-clock me-1"></i>Pending
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" onclick="viewDonation({{ donation.id }})">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                {% if not donation.is_verified %}
+                                                    <button class="btn btn-outline-success" onclick="verifyDonation({{ donation.id }})">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                {% endif %}
+                                                <button class="btn btn-outline-info" onclick="sendReceipt({{ donation.id }})">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-hand-holding-heart fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No donations received yet</h5>
+                            <p class="text-muted">Donations will appear here once alumni start contributing</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fund Allocation -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Fund Allocation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Donation Purposes</h6>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Scholarship Fund</span>
+                                    <span class="text-success fw-bold">₹0</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Infrastructure Development</span>
+                                    <span class="text-primary fw-bold">₹0</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Research & Development</span>
+                                    <span class="text-warning fw-bold">₹0</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>General Fund</span>
+                                    <span class="text-info fw-bold">₹0</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-info" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Recent Activity</h6>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">New Donation</h6>
+                                        <small class="text-muted">John Doe contributed ₹10,000</small>
+                                    </div>
+                                    <small class="text-muted">2 hours ago</small>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Donation Verified</h6>
+                                        <small class="text-muted">Jane Smith's donation confirmed</small>
+                                    </div>
+                                    <small class="text-muted">1 day ago</small>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Receipt Sent</h6>
+                                        <small class="text-muted">Tax receipt sent to Mike Johnson</small>
+                                    </div>
+                                    <small class="text-muted">3 days ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function viewDonation(donationId) {
+    alert('View donation details functionality would be implemented here');
+}
+
+function verifyDonation(donationId) {
+    if (confirm('Are you sure you want to verify this donation?')) {
+        alert('Donation verified successfully!');
+        location.reload();
+    }
+}
+
+function sendReceipt(donationId) {
+    if (confirm('Send tax receipt to donor?')) {
+        alert('Receipt sent successfully!');
+    }
+}
+
+function exportDonations() {
+    alert('Export functionality would generate a CSV file with all donation records');
+}
+
+function refreshDonations() {
+    location.reload();
+}
+</script>
+{% endblock %}

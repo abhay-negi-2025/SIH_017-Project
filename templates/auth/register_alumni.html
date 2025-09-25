@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni Registration - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 mt-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-graduate fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">Alumni Registration</h3>
+                        <p class="text-muted">Join the alumni network and connect with your alma mater</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                {{ user_form.first_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                {{ user_form.last_name }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ user_form.username.id_for_label }}" class="form-label">Username</label>
+                            {{ user_form.username }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ user_form.email }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ user_form.phone.id_for_label }}" class="form-label">Phone Number</label>
+                            {{ user_form.phone }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.password1.id_for_label }}" class="form-label">Password</label>
+                                {{ user_form.password1 }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ user_form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                                {{ user_form.password2 }}
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="text-primary mb-3">Academic Information</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.batch_year.id_for_label }}" class="form-label">Batch Year</label>
+                                {{ alumni_form.batch_year }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.branch.id_for_label }}" class="form-label">Branch</label>
+                                {{ alumni_form.branch }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ alumni_form.cgpa.id_for_label }}" class="form-label">CGPA</label>
+                            {{ alumni_form.cgpa }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.current_company.id_for_label }}" class="form-label">Current Company</label>
+                                {{ alumni_form.current_company }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.current_position.id_for_label }}" class="form-label">Current Position</label>
+                                {{ alumni_form.current_position }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ alumni_form.work_experience.id_for_label }}" class="form-label">Work Experience (Years)</label>
+                            {{ alumni_form.work_experience }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.linkedin_profile.id_for_label }}" class="form-label">LinkedIn Profile</label>
+                                {{ alumni_form.linkedin_profile }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ alumni_form.github_profile.id_for_label }}" class="form-label">GitHub Profile</label>
+                                {{ alumni_form.github_profile }}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ alumni_form.is_mentor }}
+                                <label class="form-check-label" for="{{ alumni_form.is_mentor.id_for_label }}">
+                                    I want to be a mentor
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Register as Alumni
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center">
+                        <p class="text-muted">Already have an account? 
+                            <a href="{% url 'login' %}" class="text-primary">Sign in here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

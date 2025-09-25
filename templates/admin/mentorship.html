@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+
+{% block title %}Mentorship Management - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-chalkboard-teacher me-2"></i>Mentorship Management</h2>
+                    <p class="text-muted">Monitor mentorship activities and sessions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentorship Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <div class="stat-number">{{ mentorship_stats|length }}</div>
+                    <p class="mb-0">Total Sessions</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-play fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Active</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Pending</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-check fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-graduate fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Active Mentors</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-rupee-sign fa-2x mb-2"></i>
+                    <div class="stat-number">₹0</div>
+                    <p class="mb-0">Mentor Payments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentorship Sessions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Mentorship Sessions</h5>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-success" onclick="exportMentorships()">
+                            <i class="fas fa-download me-1"></i>Export
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="refreshMentorships()">
+                            <i class="fas fa-sync me-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if mentorships %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mentor</th>
+                                        <th>Student</th>
+                                        <th>Topic</th>
+                                        <th>Status</th>
+                                        <th>Duration</th>
+                                        <th>Payment</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mentorship in mentorships %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                     style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ mentorship.mentor.profile.user.get_full_name }}</h6>
+                                                    <small class="text-muted">{{ mentorship.mentor.branch }} {{ mentorship.mentor.batch_year }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                     style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">{{ mentorship.student.profile.user.get_full_name }}</h6>
+                                                    <small class="text-muted">{{ mentorship.student.branch }} {{ mentorship.student.batch_year }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ mentorship.topic }}</span>
+                                            <br>
+                                            <small class="text-muted">{{ mentorship.description|truncatewords:5 }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge status-{{ mentorship.status }}">
+                                                {{ mentorship.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">{{ mentorship.hours_per_month }} hrs/month</span>
+                                            {% if mentorship.start_date %}
+                                                <br>
+                                                <small class="text-muted">{{ mentorship.start_date|date:"M d, Y" }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if mentorship.payment_status %}
+                                                <span class="badge bg-success">Paid</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" onclick="viewMentorship({{ mentorship.id }})">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="editMentorship({{ mentorship.id }})">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                {% if mentorship.status == 'active' %}
+                                                    <button class="btn btn-outline-info" onclick="viewSessions({{ mentorship.id }})">
+                                                        <i class="fas fa-clock"></i>
+                                                    </button>
+                                                {% endif %}
+                                                {% if mentorship.payment_status %}
+                                                    <button class="btn btn-outline-success" onclick="processPayment({{ mentorship.id }})">
+                                                        <i class="fas fa-rupee-sign"></i>
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No mentorship sessions yet</h5>
+                            <p class="text-muted">Mentorship sessions will appear here once students start applying</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentor Performance -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Mentor Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Mentor</th>
+                                            <th>Active Students</th>
+                                            <th>Completed Sessions</th>
+                                            <th>Total Hours</th>
+                                            <th>Earnings</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                         style="width: 30px; height: 30px;">
+                                                        <i class="fas fa-user text-white small"></i>
+                                                    </div>
+                                                    <span>John Doe</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">3</span></td>
+                                            <td>15</td>
+                                            <td>45 hrs</td>
+                                            <td><span class="text-success fw-bold">₹1,500</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-warning">★★★★☆</span>
+                                                    <small class="text-muted ms-1">4.2</small>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                         style="width: 30px; height: 30px;">
+                                                        <i class="fas fa-user text-white small"></i>
+                                                    </div>
+                                                    <span>Jane Smith</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary">2</span></td>
+                                            <td>8</td>
+                                            <td>24 hrs</td>
+                                            <td><span class="text-success fw-bold">₹800</span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-warning">★★★★★</span>
+                                                    <small class="text-muted ms-1">4.8</small>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Quick Stats</h6>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Average Session Duration</span>
+                                    <span class="fw-bold">2.5 hrs</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Student Satisfaction</span>
+                                    <span class="fw-bold text-success">92%</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Mentor Retention</span>
+                                    <span class="fw-bold text-primary">85%</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span>Monthly Revenue</span>
+                                    <span class="fw-bold text-success">₹2,300</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function viewMentorship(mentorshipId) {
+    alert('View mentorship details functionality would be implemented here');
+}
+
+function editMentorship(mentorshipId) {
+    alert('Edit mentorship functionality would be implemented here');
+}
+
+function viewSessions(mentorshipId) {
+    alert('View session history functionality would be implemented here');
+}
+
+function processPayment(mentorshipId) {
+    if (confirm('Process monthly payment to mentor?')) {
+        alert('Payment processed successfully!');
+        location.reload();
+    }
+}
+
+function exportMentorships() {
+    alert('Export functionality would generate a CSV file with all mentorship records');
+}
+
+function refreshMentorships() {
+    location.reload();
+}
+</script>
+{% endblock %}

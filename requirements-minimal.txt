@@ -1,0 +1,9 @@
+# Minimal requirements for Alumni Connect Platform
+# Use this if you encounter wheel building issues
+
+Django==4.2.7
+Pillow==10.1.0
+python-decouple==3.8
+requests==2.31.0
+# Stripe is optional - comment out if you don't need payment integration
+stripe==7.8.0

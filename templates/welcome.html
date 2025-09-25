@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Alumni Connect Platform</h1>
+                <p class="lead mb-4">
+                    A centralized digital platform for alumni data management and engagement. 
+                    Connect, mentor, donate, and grow together with your alma mater.
+                </p>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="feature-item">
+                            <i class="fas fa-users fa-2x mb-3"></i>
+                            <h5>Network & Connect</h5>
+                            <p class="small">Build meaningful connections with fellow alumni and students.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-item">
+                            <i class="fas fa-chalkboard-teacher fa-2x mb-3"></i>
+                            <h5>Mentorship</h5>
+                            <p class="small">Share knowledge and guide the next generation of professionals.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="feature-item">
+                            <i class="fas fa-heart fa-2x mb-3"></i>
+                            <h5>Donations</h5>
+                            <p class="small">Support your institution's growth and development.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-item">
+                            <i class="fas fa-briefcase fa-2x mb-3"></i>
+                            <h5>Opportunities</h5>
+                            <p class="small">Discover internships and career opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login-cards">
+                    <div class="row g-4">
+                        <!-- Alumni Card -->
+                        <div class="col-md-6">
+                            <div class="card login-card h-100 shadow-lg">
+                                <div class="card-body text-center">
+                                    <div class="card-icon mb-3">
+                                        <i class="fas fa-user-graduate fa-3x text-primary"></i>
+                                    </div>
+                                    <h4 class="card-title text-dark">Alumni</h4>
+                                    <p class="card-text text-muted">Connect with fellow graduates, mentor students, and give back to your institution.</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'login' %}" class="btn btn-primary">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </a>
+                                        <a href="{% url 'register' 'alumni' %}" class="btn btn-outline-primary">
+                                            <i class="fas fa-user-plus me-2"></i>Register
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Card -->
+                        <div class="col-md-6">
+                            <div class="card login-card h-100 shadow-lg">
+                                <div class="card-body text-center">
+                                    <div class="card-icon mb-3">
+                                        <i class="fas fa-user fa-3x text-success"></i>
+                                    </div>
+                                    <h4 class="card-title text-dark">Student</h4>
+                                    <p class="card-text text-muted">Find mentors, explore opportunities, and connect with successful alumni.</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'login' %}" class="btn btn-success">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </a>
+                                        <a href="{% url 'register' 'student' %}" class="btn btn-outline-success">
+                                            <i class="fas fa-user-plus me-2"></i>Register
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Administrator Card -->
+                        <div class="col-md-12">
+                            <div class="card login-card h-100 shadow-lg">
+                                <div class="card-body text-center">
+                                    <div class="card-icon mb-3">
+                                        <i class="fas fa-user-cog fa-3x text-warning"></i>
+                                    </div>
+                                    <h4 class="card-title text-dark">Administrator</h4>
+                                    <p class="card-text text-muted">Manage alumni data, events, and institutional activities.</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'login' %}" class="btn btn-warning">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </a>
+                                        <a href="{% url 'register' 'admin' %}" class="btn btn-outline-warning">
+                                            <i class="fas fa-user-plus me-2"></i>Register
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Problem Statement Section -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h2 class="mb-4">The Problem We Solve</h2>
+            <div class="problem-statement bg-light p-4 rounded shadow-sm">
+                <p class="lead">
+                    Most educational institutions lack a reliable, centralized system to manage alumni data. 
+                    Once students graduate, their contact information, academic records, and career updates 
+                    are often scattered across multiple platforms or lost entirely.
+                </p>
+                <p>
+                    This creates a significant gap in alumni engagement, limiting opportunities for mentorship, 
+                    internships, fundraising, and long-term institutional relationships.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-5">
+                <h2>Our Solution Features</h2>
+                <p class="text-muted">Comprehensive alumni management and engagement platform</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-database fa-3x text-primary"></i>
+                    </div>
+                    <h5>Centralized Data Management</h5>
+                    <p class="text-muted">Store and manage all alumni information in one secure platform.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-comments fa-3x text-success"></i>
+                    </div>
+                    <h5>Communication Hub</h5>
+                    <p class="text-muted">Facilitate seamless communication between alumni, students, and administration.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-calendar-alt fa-3x text-warning"></i>
+                    </div>
+                    <h5>Event Management</h5>
+                    <p class="text-muted">Organize and manage alumni events with easy registration and tracking.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-hand-holding-heart fa-3x text-danger"></i>
+                    </div>
+                    <h5>Fundraising</h5>
+                    <p class="text-muted">Enable secure donations and track fundraising campaigns effectively.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-briefcase fa-3x text-info"></i>
+                    </div>
+                    <h5>Career Opportunities</h5>
+                    <p class="text-muted">Connect students with internship and job opportunities from alumni.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x text-secondary"></i>
+                    </div>
+                    <h5>Analytics & Insights</h5>
+                    <p class="text-muted">Track engagement metrics and alumni success stories.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

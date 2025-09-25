@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni Dashboard - Alumni Connect Platform{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">Welcome back, {{ alumni.profile.user.get_full_name }}!</h2>
+                    <p class="text-muted mb-0">{{ alumni.branch }} {{ alumni.batch_year }} • {{ alumni.current_company|default:"Alumni" }}</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-primary fs-6">{{ alumni.profile.user_type|title }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-hand-holding-heart fa-2x mb-2"></i>
+                    <div class="stat-number">{{ recent_donations.count }}</div>
+                    <p class="mb-0">Total Donations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-briefcase fa-2x mb-2"></i>
+                    <div class="stat-number">{{ recent_internships.count }}</div>
+                    <p class="mb-0">Posted Internships</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
+                    <div class="stat-number">{{ mentorship_sessions.count }}</div>
+                    <p class="mb-0">Mentorship Sessions</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                    <div class="stat-number">0</div>
+                    <p class="mb-0">Event Registrations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a href="{% url 'alumni_search' %}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-search fa-2x mb-2"></i>
+                                <span>Search Alumni</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'alumni_donations' %}" class="btn btn-outline-success w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-heart fa-2x mb-2"></i>
+                                <span>Make Donation</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'alumni_events' %}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-calendar fa-2x mb-2"></i>
+                                <span>View Events</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'alumni_mentorship' %}" class="btn btn-outline-info w-100 h-100 d-flex flex-column justify-content-center">
+                                <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
+                                <span>Mentorship</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Donations -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-hand-holding-heart me-2"></i>Recent Donations</h5>
+                    <a href="{% url 'alumni_donations' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_donations %}
+                        {% for donation in recent_donations %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <h6 class="mb-1">₹{{ donation.amount }}</h6>
+                                <small class="text-muted">{{ donation.purpose }}</small>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted">{{ donation.donation_date|date:"M d, Y" }}</small>
+                                {% if donation.is_verified %}
+                                    <span class="badge bg-success ms-2">Verified</span>
+                                {% else %}
+                                    <span class="badge bg-warning ms-2">Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-hand-holding-heart fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No donations yet</p>
+                            <a href="{% url 'alumni_donations' %}" class="btn btn-primary">Make Your First Donation</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Posted Internships -->
+        <div class="col-lg-6 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-briefcase me-2"></i>Posted Internships</h5>
+                    <a href="{% url 'alumni_internships' %}" class="btn btn-sm btn-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_internships %}
+                        {% for internship in recent_internships %}
+                        <div class="py-2 border-bottom">
+                            <h6 class="mb-1">{{ internship.position }}</h6>
+                            <p class="mb-1 text-muted small">{{ internship.company_name }}</p>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">{{ internship.duration_months }} months</small>
+                                {% if internship.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No internships posted yet</p>
+                            <a href="{% url 'alumni_internships' %}" class="btn btn-primary">Post an Internship</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mentorship Sessions -->
+        <div class="col-lg-12 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i>Mentorship Sessions</h5>
+                    <a href="{% url 'alumni_mentorship' %}" class="btn btn-sm btn-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if mentorship_sessions %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Topic</th>
+                                        <th>Status</th>
+                                        <th>Start Date</th>
+                                        <th>Hours/Month</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for session in mentorship_sessions %}
+                                    <tr>
+                                        <td>{{ session.student.profile.user.get_full_name }}</td>
+                                        <td>{{ session.topic }}</td>
+                                        <td>
+                                            <span class="badge status-{{ session.status }}">
+                                                {{ session.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>{{ session.start_date|date:"M d, Y"|default:"Not started" }}</td>
+                                        <td>{{ session.hours_per_month }} hrs</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No mentorship sessions yet</p>
+                            <a href="{% url 'alumni_mentorship' %}" class="btn btn-primary">Start Mentoring</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

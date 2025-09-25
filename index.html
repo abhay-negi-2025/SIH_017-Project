@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniConnect - Centralized Alumni Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .hero .btn {
+            font-size: 1.1rem;
+            padding: 12px 24px;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 0;
+            background-color: #f9f9f9;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 0 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Dashboard Styles (Hidden by default) */
+        .dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-nav {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+        
+        .dashboard-nav ul li a {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .dashboard-nav ul li a.active,
+        .dashboard-nav ul li a:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
+        
+        .profile-sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .profile-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .main-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .event-image {
+            height: 150px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+        
+        .event-details {
+            padding: 1rem;
+        }
+        
+        .event-details h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alumni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .alumni-card {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .alumni-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .alumni-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-nav ul {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>AlumniConnect</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="registerBtn">Register</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Reconnect, Network, and Grow Together</h2>
+            <p>AlumniConnect is a centralized platform that bridges the gap between educational institutions and their alumni, fostering lifelong relationships and opportunities.</p>
+            <button class="btn btn-primary" id="heroRegisterBtn">Get Started Today</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Powerful Features for Alumni Engagement</h2>
+                <p>Our platform offers comprehensive tools to strengthen the alumni community and maximize institutional benefits</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-database"></i>
+                    <h3>Centralized Database</h3>
+                    <p>Secure storage of alumni contact information, academic records, and career updates in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Networking Hub</h3>
+                    <p>Connect with fellow alumni, mentors, and current students for career opportunities and guidance.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Event Management</h3>
+                    <p>Easily organize, promote, and manage alumni events, reunions, and webinars.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3>Fundraising Tools</h3>
+                    <p>Streamlined donation system to support your alma mater's growth and initiatives.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Communication Platform</h3>
+                    <p>Send announcements, newsletters, and updates to keep alumni informed and engaged.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Career Tracking</h3>
+                    <p>Monitor alumni career progression and success stories to showcase institutional impact.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How AlumniConnect Works</h2>
+                <p>Simple steps to transform your alumni management and engagement</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Institution Registration</h3>
+                    <p>Educational institutions register and set up their alumni portal with custom branding.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Alumni Onboarding</h3>
+                    <p>Alumni create profiles, verify credentials, and join their institution's network.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Engagement & Networking</h3>
+                    <p>Alumni connect, participate in events, mentor students, and explore opportunities.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Growth & Impact</h3>
+                    <p>Institutions leverage alumni relationships for mentorship, internships, and fundraising.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>See how institutions and alumni are benefiting from AlumniConnect</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"AlumniConnect has revolutionized how we engage with our graduates. We've seen a 300% increase in alumni participation since implementation."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div>
+                            <h4>Jennifer Davis</h4>
+                            <p>Alumni Relations Director, University of Technology</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Through AlumniConnect, I reconnected with my college mentor and landed my dream job. The networking opportunities are incredible."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div>
+                            <h4>Michael Roberts</h4>
+                            <p>Software Engineer, Class of 2015</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The platform's event management tools have made organizing our annual alumni meetups seamless and much more successful."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SP</div>
+                        <div>
+                            <h4>Sarah Peterson</h4>
+                            <p>Alumni Association President</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2>Ready to Transform Your Alumni Engagement?</h2>
+            <p>Join hundreds of educational institutions already using AlumniConnect to strengthen their alumni community.</p>
+            <button class="btn btn-outline" id="ctaRegisterBtn">Get Started Now</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>AlumniConnect</h3>
+                    <p>Centralized alumni management platform for educational institutions to foster lifelong relationships and opportunities.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Webinars</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@alumniconnect.com</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Education Ave, City, State 12345</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AlumniConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login to AlumniConnect</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join AlumniConnect</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="userType">I am a:</label>
+                    <select id="userType" required>
+                        <option value="">Select user type</option>
+                        <option value="alumni">Alumni</option>
+                        <option value="admin">Institution Administrator</option>
+                        <option value="student">Current Student</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email Address</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerInstitution">Educational Institution</label>
+                    <input type="text" id="registerInstitution" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Already have an account? <a href="#" id="switchToLogin">Login here</a></p>
+        </div>
+    </div>
+
+    <!-- Dashboard (Hidden by default) -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>AlumniConnect Dashboard</h2>
+                <div>
+                    <span id="userWelcome">Welcome, John Doe!</span>
+                    <button class="btn btn-outline" id="logoutBtn" style="margin-left: 1rem;">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-nav">
+                <ul>
+                    <li><a href="#overview" class="nav-link active">Overview</a></li>
+                    <li><a href="#profile" class="nav-link">My Profile</a></li>
+                    <li><a href="#network" class="nav-link">Alumni Network</a></li>
+                    <li><a href="#events" class="nav-link">Events</a></li>
+                    <li><a href="#opportunities" class="nav-link">Opportunities</a></li>
+                    <li><a href="#donations" class="nav-link">Donations</a></li>
+                </ul>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="profile-sidebar">
+                    <div class="profile-avatar">JD</div>
+                    <div class="profile-info">
+                        <h3>John Doe</h3>
+                        <p>Class of 2015</p>
+                        <p>Software Engineer at TechCorp</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Edit Profile</button>
+                    </div>
+                </div>
+                
+                <div class="main-content">
+                    <div id="overview" class="content-section active">
+                        <h3>Dashboard Overview</h3>
+                        <p>Welcome to your AlumniConnect dashboard! Here you can:</p>
+                        <ul style="margin: 1rem 0 1rem 2rem;">
+                            <li>Update your profile and career information</li>
+                            <li>Connect with fellow alumni and mentors</li>
+                            <li>Register for upcoming events and reunions</li>
+                            <li>Explore mentorship and internship opportunities</li>
+                            <li>Support your alma mater through donations</li>
+                        </ul>
+                        
+                        <h4>Upcoming Events</h4>
+                        <div class="events-grid">
+                            <div class="event-card">
+                                <div class="event-image">Annual Alumni Meet</div>
+                                <div class="event-details">
+                                    <h4>Annual Alumni Meet 2023</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Oct 15, 2023</span>
+                                        <span><i class="far fa-clock"></i> 6:00 PM</span>
+                                    </div>
+                                    <p>Join us for the annual alumni reunion at the campus auditorium.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                            <div class="event-card">
+                                <div class="event-image">Career Workshop</div>
+                                <div class="event-details">
+                                    <h4>Career Development Workshop</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Nov 5, 2023</span>
+                                        <span><i class="far fa-clock"></i> 2:00 PM</span>
+                                    </div>
+                                    <p>Online workshop on career advancement strategies for recent graduates.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="profile" class="content-section">
+                        <h3>My Profile</h3>
+                        <form>
+                            <div class="form-group">
+                                <label for="profileName">Full Name</label>
+                                <input type="text" id="profileName" value="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail" value="john.doe@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileGraduation">Graduation Year</label>
+                                <input type="number" id="profileGraduation" value="2015">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileDegree">Degree</label>
+                                <input type="text" id="profileDegree" value="Bachelor of Computer Science">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileJob">Current Job Title</label>
+                                <input type="text" id="profileJob" value="Software Engineer">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileCompany">Company</label>
+                                <input type="text" id="profileCompany" value="TechCorp">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileBio">Bio</label>
+                                <textarea id="profileBio">Experienced software engineer with 8+ years in the tech industry. Passionate about mentoring new graduates and contributing to open-source projects.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                    
+                    <div id="network" class="content-section">
+                        <h3>Alumni Network</h3>
+                        <p>Connect with fellow alumni from your institution:</p>
+                        
+                        <div class="alumni-grid">
+                            <div class="alumni-card">
+                                <div class="alumni-avatar">SM</div>
+                                <h4>Sarah Mitchell</h4>
+                                <p>Class of 2014</p>
+                                <p>Product Manager</p>
+                                <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">Connect</button>
+                            </div>
+                            <div class="alumni-card">
+                                <div class="alumni-avatar">RJ</div>
+                                <h4>Robert Johnson</h4>
+                                <p>Class of 2012</p>
+                                <p>Data Scientist</p>
+                                <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">Connect</button>
+                            </div>
+                            <div class="alumni-card">
+                                <div class="alumni-avatar">EW</div>
+                                <h4>Emily Wilson</h4>
+                                <p>Class of 2016</p>
+                                <p>UX Designer</p>
+                                <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">Connect</button>
+                            </div>
+                            <div class="alumni-card">
+                                <div class="alumni-avatar">DP</div>
+                                <h4>David Park</h4>
+                                <p>Class of 2013</p>
+                                <p>Entrepreneur</p>
+                                <button class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="events" class="content-section">
+                        <h3>Upcoming Events</h3>
+                        <div class="events-grid">
+                            <div class="event-card">
+                                <div class="event-image">Annual Alumni Meet</div>
+                                <div class="event-details">
+                                    <h4>Annual Alumni Meet 2023</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Oct 15, 2023</span>
+                                        <span><i class="far fa-clock"></i> 6:00 PM</span>
+                                    </div>
+                                    <p>Join us for the annual alumni reunion at the campus auditorium.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                            <div class="event-card">
+                                <div class="event-image">Career Workshop</div>
+                                <div class="event-details">
+                                    <h4>Career Development Workshop</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Nov 5, 2023</span>
+                                        <span><i class="far fa-clock"></i> 2:00 PM</span>
+                                    </div>
+                                    <p>Online workshop on career advancement strategies for recent graduates.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                            <div class="event-card">
+                                <div class="event-image">Mentorship Program</div>
+                                <div class="event-details">
+                                    <h4>Mentorship Program Kickoff</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Dec 1, 2023</span>
+                                        <span><i class="far fa-clock"></i> 4:00 PM</span>
+                                    </div>
+                                    <p>Orientation for alumni mentors and student mentees.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                            <div class="event-card">
+                                <div class="event-image">Fundraising Gala</div>
+                                <div class="event-details">
+                                    <h4>Scholarship Fundraising Gala</h4>
+                                    <div class="event-meta">
+                                        <span><i class="far fa-calendar"></i> Jan 20, 2024</span>
+                                        <span><i class="far fa-clock"></i> 7:00 PM</span>
+                                    </div>
+                                    <p>Elegant evening to raise funds for student scholarships.</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Register</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="opportunities" class="content-section">
+                        <h3>Career Opportunities</h3>
+                        <p>Explore mentorship, internship, and job opportunities:</p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <h4>Available Mentors</h4>
+                            <div class="alumni-grid">
+                                <div class="alumni-card">
+                                    <div class="alumni-avatar">SM</div>
+                                    <h4>Sarah Mitchell</h4>
+                                    <p>Product Manager</p>
+                                    <p>8+ years experience</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Request Mentorship</button>
+                                </div>
+                                <div class="alumni-card">
+                                    <div class="alumni-avatar">RJ</div>
+                                    <h4>Robert Johnson</h4>
+                                    <p>Data Scientist</p>
+                                    <p>10+ years experience</p>
+                                    <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Request Mentorship</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4>Internship Opportunities</h4>
+                            <div class="events-grid">
+                                <div class="event-card">
+                                    <div class="event-image">TechCorp Internship</div>
+                                    <div class="event-details">
+                                        <h4>Software Engineering Intern</h4>
+                                        <p>TechCorp is offering summer internships for current students.</p>
+                                        <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Apply Now</button>
+                                    </div>
+                                </div>
+                                <div class="event-card">
+                                    <div class="event-image">DataTech Internship</div>
+                                    <div class="event-details">
+                                        <h4>Data Science Intern</h4>
+                                        <p>DataTech seeks interns for their machine learning team.</p>
+                                        <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Apply Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="donations" class="content-section">
+                        <h3>Support Your Alma Mater</h3>
+                        <p>Your contributions help fund scholarships, campus improvements, and educational programs.</p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <h4>Make a Donation</h4>
+                            <form>
+                                <div class="form-group">
+                                    <label for="donationAmount">Donation Amount ($)</label>
+                                    <input type="number" id="donationAmount" min="1" value="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="donationFund">Select Fund</label>
+                                    <select id="donationFund">
+                                        <option value="general">General Fund</option>
+                                        <option value="scholarship">Student Scholarship Fund</option>
+                                        <option value="library">Library Improvement Fund</option>
+                                        <option value="sports">Athletics Program</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="donationMessage">Message (Optional)</label>
+                                    <textarea id="donationMessage" placeholder="Add a personal message with your donation"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Donate Now</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const heroRegisterBtn = document.getElementById('heroRegisterBtn');
+        const ctaRegisterBtn = document.getElementById('ctaRegisterBtn');
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const dashboard = document.getElementById('dashboard');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        // Show Login Modal
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            registerModal.style.display = 'none';
+        });
+        
+        // Show Register Modal
+        registerBtn.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+            loginModal.style.display = 'none';
+        });
+        
+        heroRegisterBtn.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+            loginModal.style.display = 'none';
+        });
+        
+        ctaRegisterBtn.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+            loginModal.style.display = 'none';
+        });
+        
+        // Close Modals
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                registerModal.style.display = 'none';
+            });
+        });
+        
+        // Switch between Login and Register modals
+        switchToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'flex';
+            loginModal.style.display = 'none';
+        });
+        
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'flex';
+            registerModal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+            if (e.target === registerModal) {
+                registerModal.style.display = 'none';
+            }
+        });
+        
+        // Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // In a real application, you would validate credentials with a server
+            // For this demo, we'll just show the dashboard
+            loginModal.style.display = 'none';
+            dashboard.style.display = 'block';
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('.hero').style.display = 'none';
+            document.querySelector('.features').style.display = 'none';
+            document.querySelector('.how-it-works').style.display = 'none';
+            document.querySelector('.testimonials').style.display = 'none';
+            document.querySelector('.cta').style.display = 'none';
+            document.querySelector('footer').style.display = 'none';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        });
+        
+        // Register Form Submission
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // In a real application, you would send registration data to a server
+            // For this demo, we'll just show the dashboard
+            registerModal.style.display = 'none';
+            dashboard.style.display = 'block';
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('.hero').style.display = 'none';
+            document.querySelector('.features').style.display = 'none';
+            document.querySelector('.how-it-works').style.display = 'none';
+            document.querySelector('.testimonials').style.display = 'none';
+            document.querySelector('.cta').style.display = 'none';
+            document.querySelector('footer').style.display = 'none';
+            
+            // Update welcome message with registered name
+            const userName = document.getElementById('registerName').value;
+            document.getElementById('userWelcome').textContent = `Welcome, ${userName}!`;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        });
+        
+        // Logout Functionality
+        logoutBtn.addEventListener('click', () => {
+            dashboard.style.display = 'none';
+            document.querySelector('header').style.display = 'block';
+            document.querySelector('.hero').style.display = 'block';
+            document.querySelector('.features').style.display = 'block';
+            document.querySelector('.how-it-works').style.display = 'block';
+            document.querySelector('.testimonials').style.display = 'block';
+            document.querySelector('.cta').style.display = 'block';
+            document.querySelector('footer').style.display = 'block';
+        });
+        
+        // Dashboard Navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                
+                // Update active nav link
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show corresponding content section
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -6,8 +6,8 @@ This is useful for quick testing and demonstration purposes.
 
 import os
 import sys
-import django
-from django.core.management import execute_from_command_line
+import django  # pyright: ignore[reportMissingImports]
+from django.core.management import execute_from_command_line  # pyright: ignore[reportMissingImports]
 
 if __name__ == '__main__':
     # Set default settings

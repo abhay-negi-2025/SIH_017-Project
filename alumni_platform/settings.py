@@ -5,16 +5,16 @@ Django settings for alumni_platform project.
 from pathlib import Path
 import os
 from decouple import config  # pyright: ignore[reportMissingImports]
-import firebase_admin
-from firebase_admin import firestore
+# import firebase_admin
+# from firebase_admin import firestore
 
-cred = credentials.Certificate('C:/Users/abhay/Downloads/alumni-connect-a15d5-firebase-adminsdk-fbsvc-522dfcde81.json')
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate('C:/Users/abhay/Downloads/alumni-connect-a15d5-firebase-adminsdk-fbsvc-522dfcde81.json')
+# firebase_admin.initialize_app(cred)
 
-db = firestore.client()
+# db = firestore.client()
 
-from django.http import JsonResponse
-from django.conf import settings
+# from django.http import JsonResponse
+# from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

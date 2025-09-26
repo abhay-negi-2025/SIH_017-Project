@@ -6,13 +6,13 @@ This solves the createsuperuser password input issue
 
 import os
 import sys
-import django
+import django  # pyright: ignore[reportMissingImports]
 
 # Setup Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alumni_platform.settings')
 django.setup()
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # pyright: ignore[reportMissingImports]
 from main_app.models import Profile, CollegeAdmin
 
 def create_admin_user():
